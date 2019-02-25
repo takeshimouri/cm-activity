@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <title><%= title %></title>　
+  <!-- 　　　　//index.js上でタイトル表示用として定義した変数titleの値をタイトルバーへ表示 -->
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<div class="float2">読者番号</div>
+<div class="float">
+  <form method="post" action='/'>
+    <input class="form float" type="text" name="message" value="<%- content %>">
+</div>
+<div class="mtop">
+  <input class="cp_btn bottom" type="submit" value="検索">
+  <div class="bold2">
+    書籍・CD・DVD・大会・セミナー　履歴一覧<br>
+    <div class="thin">
+      ※ 最新のデータはお客様が「申込・キャンセル・変更」をされた翌営業日の夕方以降に反映（繁忙期は除く）
+    </div>
+  </div>
+</div>
+</form>
+<!-- <br> -->
+<!-- //index.js上連想配列array.contentの内容を表示する。 -->
+
+<body>
+  <table id="table">
+    <thead>
+      <tr>
+        <th>読者番号</th>
+        <th>請求先顧客名</th>
+        <th>部署名</th>
+        <th>氏名</th>
+        <th>部門</th>
+        <th>日付</th>
+        <th>売掛No.</th>
+        <th>商品名</th>
+        <th>数量</th>
+        <th>金額</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(function (cm_aclg) { %>
+      <!-- 　　　　　　　　//table user に対し、行を繰り返し -->
+      <tr>
+        <td><%= cm_aclg.AL_CDSQSK %></td>　　
+        <td><%= cm_aclg.AL_NMSQSK %></td>　　
+        <td><%= cm_aclg.AL_NMSQBU %></td>　　
+        <td><%= cm_aclg.AL_NMSQTN %></td>　　
+        <!-- //table user から al_nmsqsk 列の値を表示 -->
+        <td><%= cm_aclg.AL_NMACTV %></td>　　
+        <% const dd = cm_aclg.AL_DTACTV;
+            //「年」を取得する
+            var YYYY = dd.getFullYear();
+            //「月」を取得する
+            var MM = dd.getMonth()+1;
+            //「日」を取得する
+            var DD = dd.getDate();
+            if (MM < 10) {
+              MM = "0" + MM;
+            };
+            if (DD < 10) {
+              DD = "0" + DD;
+            };
+            const pelem011 = YYYY + "/" + MM + "/" + DD;
+         %>
+        <td class="pelem011"><%= pelem011 %></td>
+        <td class="int"><%= cm_aclg.AL_NOACTV %></td>　　
+        <td><%= cm_aclg.AL_TXACTV %></td>　　
+        <td class="int"><%= cm_aclg.AL_SUSURY %></td>　　
+        <td class="int"><%= cm_aclg.AL_KGGOKE.toLocaleString() %></td>　　
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <script src="http://cdn.date-fns.org/v1.9.0/date_fns.min.js"></script>
+</body>
+
+</html>
+<!-- <div id="app">
+    <ul>
+      <li v-for="todo in todos">
+        <input type="text" v-model="todo.title" />
+        <input type="button" value="編集" @click="update(todo)" />
+        <input type="button" value="削除" @click="remove(todo)" />
+      </li>
+    </ul>
+    <input type="text" v-model="new_todo">
+    <input type="button" value="追加" @click="create">
+  </div> -->
+
+
+
+</html>

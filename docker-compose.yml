@@ -1,0 +1,44 @@
+version: '3.3'
+
+services:
+  # MySQL
+  db:
+    image: mysql:5.7
+    container_name: cm_activity_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ccwebdb
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+    # - ./docker/db/data:/var/lib/mysql
+    # - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    - ./db/sql:/docker-entrypoint-initdb.d
+    - mysql-data:/var/lib/mysql
+    ports:
+    - 3306:3306
+  
+  node:
+    build:
+      context: .
+#      args:
+#        - NODE_ENV=development
+
+    container_name: cm_activity_node
+    ports:
+      - "3001:3001"
+    tty: true
+    
+    # links:
+    #   - 813d4bd0ae81
+    # volumes:
+    #   - ./database:/app/database:delegate
+#      - NODE_ENV=development
+    depends_on:
+      - db
+    command: sh /wait.sh npm start
+
+volumes:
+  mysql-data:
